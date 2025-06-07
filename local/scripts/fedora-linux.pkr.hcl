@@ -9,7 +9,7 @@ packer {
 
 source "qemu" "golden" {
   iso_url           = "https://download.fedoraproject.org/pub/fedora/linux/releases/42/Cloud/x86_64/images/Fedora-Cloud-Base-UEFI-UKI-42-1.1.x86_64.qcow2"
-  iso_checksum      = "sha256:{$acaab7d42e413264b92a7b0edb0b07aaf903bb8ed33ec880f73bca92e751269e}"
+  iso_checksum      = "sha256:acaab7d42e413264b92a7b0edb0b07aaf903bb8ed33ec880f73bca92e751269e"
   iso_target_path   = "~/Downloads"
   accelerator       = "kvm"
   cpus              = "2"
