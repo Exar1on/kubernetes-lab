@@ -4,6 +4,9 @@ packer {
       version = "v1.1.2"
       source  = "github.com/hashicorp/qemu"
     }
+    ansible = {
+     version  = "~> 1"
+     source   = "github.com/hashicorp/ansible"
   }
 }
 
@@ -24,4 +27,7 @@ source "qemu" "golden" {
 
 build {
     sources =["source.qemu.golden"]
+    
+    provisioner "ansible" {
+      playbook_file = "./ansible/todo.yml"
 }
