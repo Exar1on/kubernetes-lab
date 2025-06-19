@@ -7,6 +7,7 @@ packer {
     ansible = {
      version  = "~> 1"
      source   = "github.com/hashicorp/ansible"
+    }
   }
 }
 
@@ -30,4 +31,5 @@ build {
     
     provisioner "ansible" {
       playbook_file = "./ansible/todo.yml"
+  }
 }

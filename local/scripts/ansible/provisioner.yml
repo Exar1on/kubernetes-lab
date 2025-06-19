@@ -1,0 +1,9 @@
+---
+- name: Provision the packer image
+  hosts: default
+  become: yes
+  tasks:
+    - name: Update and install packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
