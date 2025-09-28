@@ -12,8 +12,8 @@ packer {
 }
 
 source "qemu" "golden" {
-  iso_url           = "https://download.fedoraproject.org/pub/fedora/linux/releases/42/Cloud/x86_64/images/Fedora-Cloud-Base-UEFI-UKI-42-1.1.x86_64.qcow2"
-  iso_checksum      = "sha256:acaab7d42e413264b92a7b0edb0b07aaf903bb8ed33ec880f73bca92e751269e"
+  iso_url           = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-nocloud-amd64.qcow2"       
+  iso_checksum      = "sha512:f88bdcec45b37f5a504b3c1d1f153086ec93f57ac7c691d05a8e912d25f9ba1afaa8152771b0912ff62177fc4169c51710185ec598afc28f9e5b781fcc2b96bb"
   iso_target_path   = "~/Downloads"
   accelerator       = "kvm"
   cpus              = "2"
@@ -22,7 +22,7 @@ source "qemu" "golden" {
   memory            = "2048"
   output_directory  = "~/"
   communicator      = "ssh"
-  ssh_username      = "terraform"
+  ssh_username      = "root"
   ssh_agent_auth    = true
 }  
 
