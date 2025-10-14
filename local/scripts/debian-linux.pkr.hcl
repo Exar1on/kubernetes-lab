@@ -30,11 +30,23 @@ source "qemu" "golden" {
   communicator      = "ssh"
   ssh_username      = "root"
   ssh_password      = ""
+  ssh_port          = 22
   ssh_agent_auth    = true
   ssh_timeout       = "20m"
+  host_port_min     = 2222
+  host_port_max     = 2222
+  qemuargs          = [
+    ["-netdev", "user,id=net0,hostfwd=tcp::2222:-:22"],
+    ["-device", "virtio-net,netdev=net0"]
+  ]
   boot_command      = [
-    "<wait5><enter>",
-    "systemctl enable ssh && systemctl start ssh<enter>"
+    "<wait2><enter><wait10>",
+    "root<enter>",
+    "apt-get update<enter><wait10>",
+    "apt-get install ssh -y <enter><wait20>",
+    "systemctl enable ssh<enter><wait5>",
+    "systemctl start ssh<enter>"
+  ]
 }  
 
 build {
