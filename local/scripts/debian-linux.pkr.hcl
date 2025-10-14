@@ -31,6 +31,10 @@ source "qemu" "golden" {
   ssh_username      = "root"
   ssh_password      = ""
   ssh_agent_auth    = true
+  ssh_timeout       = "20m"
+  boot_command      = [
+    "<wait5><enter>",
+    "systemctl enable ssh && systemctl start ssh<enter>"
 }  
 
 build {
