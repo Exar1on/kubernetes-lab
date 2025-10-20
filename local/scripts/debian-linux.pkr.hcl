@@ -42,17 +42,21 @@ source "qemu" "golden" {
   boot_command      = [
     "<wait2><enter><wait10>",
     "root<enter>",
-    "apt-get update<enter><wait10>",
-    "apt-get install ssh -y <enter><wait20>",
-    "systemctl enable ssh<enter><wait5>",
-    "systemctl start ssh<enter>"
   ]
 }  
 
 build {
     sources =["source.qemu.golden"]
-    
-    provisioner "ansible" {
+
+    provisioner "shell" {
+      inline  = [
+        "apt-get update",
+        "apt-get install -y python3 python-pip",
+        "pip3 install ansible"
+      ]
+    }
+
+    provisioner "ansible-local" {
       playbook_file = "./ansible/provisioner.yml"
   }
 }
