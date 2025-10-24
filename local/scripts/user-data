@@ -1,0 +1,10 @@
+#cloud-config
+users:
+  - name: packer
+    groups: users,admin
+    shell: /bin/bash
+    home: /home/packer
+    lock_passwd:  true
+    ssh_authorized_keys:
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAdA0VBwSkBiEsRFrg3dGFBAAorLQ9C1TQUNVgeEoQSC packer@localhost"
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
