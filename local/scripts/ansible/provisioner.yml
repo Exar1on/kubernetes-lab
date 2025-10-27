@@ -7,3 +7,24 @@
       ansible.builtin.apt:
         name: "*"
         state: latest
+- name: Group management
+  hosts: default
+  become: yes
+  tasks:
+    - name: Create default group
+      ansible.builtin.group:
+        name: default
+        state: present
+
+- name: User management
+  hosts: default
+  become: yes
+  tasks:
+    - name: Create default user
+      ansible.builtin.user:
+        name: default
+        shell: /bin/bash
+        create_home: true
+        groups: default, sudo
+        append: true
+      

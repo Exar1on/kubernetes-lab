@@ -16,6 +16,7 @@ source "qemu" "golden" {
   iso_checksum      = "sha512:aa1963a7356a7fab202e5eebc0c1954c4cbd4906e3d8e9bf993beb22e0a90cd7fe644bd5e0fb5ec4b9fbea16744c464fda34ef1be5c3532897787d16c7211f86"
   iso_target_path   = "./Downloads"
   output_directory  = "output-build"
+  vm_name           = "packer-golden.qcow2"
   disk_image        = true
   efi_boot          = true
   efi_firmware_code = "/usr/share/edk2-ovmf/x64/OVMF_CODE.4m.fd"
