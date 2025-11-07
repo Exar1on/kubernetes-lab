@@ -18,9 +18,6 @@ source "qemu" "golden" {
   output_directory  = "output-build"
   vm_name           = "packer-golden.qcow2"
   disk_image        = true
-  efi_boot          = true
-  efi_firmware_code = "/usr/share/edk2-ovmf/x64/OVMF_CODE.4m.fd"
-  efi_firmware_vars = "/usr/share/edk2-ovmf/x64/OVMF_VARS.4m.fd"
   boot_wait         = "20s"
   accelerator       = "kvm"
   machine_type      = "q35"
