@@ -48,13 +48,6 @@ source "qemu" "golden" {
 build {
     sources =["source.qemu.golden"]
 
-    provisioner "shell" {
-      inline  = [
-        "sudo apt update",
-        "sudo apt install -y python3 python3-pip aptitude",
-      ]
-    }
-
     provisioner "ansible" {
       playbook_file = "./ansible/provisioner.yml"
   }

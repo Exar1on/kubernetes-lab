@@ -1,30 +1,67 @@
 ---
-- name: Provision the packer image
-  hosts: default
+- hosts: default
   become: yes
   tasks:
     - name: Update and install packages
       ansible.builtin.apt:
         name: "*"
         state: latest
-- name: Group management
-  hosts: default
-  become: yes
-  tasks:
-    - name: Create default group
+
+    - name: Group management
       ansible.builtin.group:
         name: default
         state: present
 
-- name: User management
-  hosts: default
-  become: yes
-  tasks:
-    - name: Create default user
+    - name: User management
       ansible.builtin.user:
         name: default
         shell: /bin/bash
         create_home: true
-        groups: default, sudo
+        groups: default
         append: true
-      
+        password: "{{ lookup('env', 'TEMP_PASS') | password_hash('sha512') }}"
+
+    - name: Install OpenSSH
+      ansible.builtin.apt:
+        name: openssh-server
+        state: latest
+        update_cache: yes
+
+    - name: Start,Enable SSH service
+      ansible.builtin.service:
+        name: ssh
+        state: started
+        enable: yes
+
+    - name: Sudoers
+      lineinfile:
+        path: /etc/sudoers.d/default
+        create: yes
+        mode: 0440
+        append: yes
+        line: 'default ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: Create SSH dir
+      ansible.builtin.file:
+        path: "/home/default/.ssh"
+        state: directory
+        mode: '0700'
+        owner: default
+        group: default
+
+    - name: Add SSH pubkey
+      ansible.posix.authorized_key:
+        user: default
+        state: present
+        key: "~/.ssh/k8_ed25519.pub"
+
+    - name: collect sshd journal
+      ansible.builtin.shell: |
+        journalctl -u sshd.service -b --no-pager -n 500 || journalctl -u ssh.service -b --no-pager -n 500
+      register: sshd_journal
+      ignore_errors: yes
+
+    - name: journal output
+      ansible.buildin.debug:
+        var: sshd_journal.stdout_lines

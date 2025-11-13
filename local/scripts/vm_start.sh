@@ -25,6 +25,8 @@ virsh net-define default-network.xml
 virsh net-start default
 virsh net-autostart default
 
+virsh undefine --domain kubernetes-control --nvram
+
 #define vm parameters
 virt-install \
 	--name kubernetes-control \
