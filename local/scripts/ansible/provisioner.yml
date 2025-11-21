@@ -63,5 +63,5 @@
       ignore_errors: yes
 
     - name: journal output
-      ansible.buildin.debug:
+      ansible.builtin.debug:
         var: sshd_journal.stdout_lines
