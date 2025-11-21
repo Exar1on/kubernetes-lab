@@ -19,7 +19,7 @@
         create_home: true
         groups: default
         append: true
-        password: "{{ lookup('env', 'TEMP_PASS') | password_hash('sha512') }}"
+        password: "{{ lookup('ansible.builtin.env', 'TEMP_PASS') | password_hash('sha512') }}"
 
     - name: Install OpenSSH
       ansible.builtin.apt:
@@ -28,17 +28,17 @@
         update_cache: yes
 
     - name: Start,Enable SSH service
-      ansible.builtin.service:
-        name: ssh
+      ansible.builtin.systemd:
+        name: sshd
         state: started
-        enable: yes
+        enabled: true
+        masked: false
 
     - name: Sudoers
       lineinfile:
         path: /etc/sudoers.d/default
-        create: yes
+        create: true
         mode: 0440
-        append: yes
         line: 'default ALL=(ALL) NOPASSWD: ALL'
         validate: 'visudo -cf %s'
 
@@ -54,7 +54,7 @@
       ansible.posix.authorized_key:
         user: default
         state: present
-        key: "~/.ssh/k8_ed25519.pub"
+        key: "file:// {{ lookup ('ansible.builtin.env', 'HOME') }}/.ssh/k8_ed25519.pub"
 
     - name: collect sshd journal
       ansible.builtin.shell: |
