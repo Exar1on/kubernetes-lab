@@ -54,7 +54,7 @@
       ansible.posix.authorized_key:
         user: default
         state: present
-        key: "file:// {{ lookup ('ansible.builtin.env', 'HOME') }}/.ssh/k8_ed25519.pub"
+        key: "{{ lookup('ansible.builtin.file', lookup('ansible.builtin.env', 'HOME') + '/.ssh/k8_ed25519.pub') }}"
 
     - name: collect sshd journal
       ansible.builtin.shell: |
