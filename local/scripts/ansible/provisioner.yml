@@ -35,12 +35,13 @@
         masked: false
 
     - name: Sudoers
-      lineinfile:
-        path: /etc/sudoers.d/default
-        create: true
-        mode: 0440
-        line: 'default ALL=(ALL) NOPASSWD: ALL'
-        validate: 'visudo -cf %s'
+      community.general.sudoers:
+        name: default
+        user: default
+        commands: ALL
+        nopassword: true
+        setenv: true
+        state: present
 
     - name: Create SSH dir
       ansible.builtin.file:
