@@ -17,7 +17,7 @@
         name: default
         shell: /bin/bash
         create_home: true
-        groups: default
+        groups: default,sudo
         append: true
         password: "{{ lookup('ansible.builtin.env', 'TEMP_PASS') | password_hash('sha512') }}"
 
@@ -41,7 +41,9 @@
         commands: ALL
         nopassword: true
         setenv: true
+        sudoers_path: /etc/sudoers.d
         state: present
+        validation: required
 
     - name: Create SSH dir
       ansible.builtin.file:

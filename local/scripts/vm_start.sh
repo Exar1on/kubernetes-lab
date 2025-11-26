@@ -3,10 +3,10 @@
 #Define default network and services
 systemctl start libvirtd
 
-file="./default-network.xml"
-if [ -e "$file" ];then
-	echo "default network file exists"
-else 
+#file="./default-network.xml"
+#if [ -e "$file" ];then
+#	echo "default network file exists"
+#else 
 cat > default-network.xml <<EOF
 <network>
 	<name>default</name>
@@ -19,11 +19,12 @@ cat > default-network.xml <<EOF
 	</ip>
 </network>
 EOF
-fi
-
+#fi
+virsh net-undefine default
 virsh net-define default-network.xml
 virsh net-start default
 virsh net-autostart default
+virsh net-list --all
 
 virsh undefine --domain kubernetes-control --nvram
 
