@@ -59,19 +59,27 @@
         state: present
         key: "{{ lookup('ansible.builtin.file', lookup('ansible.builtin.env', 'HOME') + '/.ssh/k8_ed25519.pub') }}"
 
+    - name: Ensure systemd/network dir exists
+      ansible.builtin.file:
+        path: /etc/systemd/network
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
     - name: systemd-networkd conf
-      vars:
-        if: "{{ ansible_facts.interfaces | difference(['lo']) | first }}"
-        ansible.builtin.copy:
-          dest: "/etc/systemd/network/20-dhcp.network"
-          content: |
-            [Match]
-            Name={{ if }}
-            [Network]
-            DHCP=yes
-          owner:root
-          group:root
-          mode: '0644'
+      ansible.builtin.copy:
+        dest: /etc/systemd/network/20-dhcp.network
+        content: |
+          [Match]
+          Name=e*
+
+          [Network]
+          DHCP=yes
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart systemd-networkd
 
     - name: systemd-networkd service
       ansible.builtin.systemd:
@@ -80,16 +88,25 @@
         state: started
 
     - name: systemd-resolved service
-      anisble.builtin.systemd:
+      ansible.builtin.systemd:
         name: systemd-resolved
         enabled: yes
         state: started
 
     - name: Link resolved to resolv.conf
       ansible.builtin.file:
-        source: /run/systemd/resolve/resolv.conf
+        src: /run/systemd/resolve/resolv.conf
         dest: /etc/resolv.conf
         state: link
         force: yes
 
-      
+    - name: KVM/QEMU Filesystem cache sync
+      ansible.builtin.command: sync
+      changed_when: false
+
+  handlers:
+    - name: Restart systemd-networkd
+      ansible.builtin.service:
+        name: systemd-networkd
+        state: restarted
+        enabled: yes
