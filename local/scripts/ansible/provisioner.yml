@@ -59,12 +59,37 @@
         state: present
         key: "{{ lookup('ansible.builtin.file', lookup('ansible.builtin.env', 'HOME') + '/.ssh/k8_ed25519.pub') }}"
 
-    - name: collect sshd journal
-      ansible.builtin.shell: |
-        journalctl -u sshd.service -b --no-pager -n 500 || journalctl -u ssh.service -b --no-pager -n 500
-      register: sshd_journal
-      ignore_errors: yes
+    - name: systemd-networkd conf
+      vars:
+        if: "{{ ansible_facts.interfaces | difference(['lo']) | first }}"
+        ansible.builtin.copy:
+          dest: "/etc/systemd/network/20-dhcp.network"
+          content: |
+            [Match]
+            Name={{ if }}
+            [Network]
+            DHCP=yes
+          owner:root
+          group:root
+          mode: '0644'
 
-    - name: journal output
-      ansible.builtin.debug:
-        var: sshd_journal.stdout_lines
+    - name: systemd-networkd service
+      ansible.builtin.systemd:
+        name: systemd-networkd
+        enabled: yes
+        state: started
+
+    - name: systemd-resolved service
+      anisble.builtin.systemd:
+        name: systemd-resolved
+        enabled: yes
+        state: started
+
+    - name: Link resolved to resolv.conf
+      ansible.builtin.file:
+        source: /run/systemd/resolve/resolv.conf
+        dest: /etc/resolv.conf
+        state: link
+        force: yes
+
+      
