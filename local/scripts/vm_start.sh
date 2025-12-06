@@ -39,4 +39,5 @@ virt-install \
 	--import \
 	--os-variant debian13 \
 	--network network=default,model=virtio \
-	--graphics none
+	--graphics none \
+	&
