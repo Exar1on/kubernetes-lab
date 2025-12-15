@@ -21,4 +21,15 @@ spec:
         image: nginx:latest
         ports:
         - containerPort: 80
-
+        envFrom:
+          - configMapRef:
+              name: envconfmap
+        volumeMounts:
+          - name: sample-vol
+            mountPath: /etc/sample/
+            readOnly: true
+   
+      volumes:
+        - name: sample-vol
+          configMap:
+            name: envconfmap  
