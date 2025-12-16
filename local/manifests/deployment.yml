@@ -28,8 +28,16 @@ spec:
           - name: sample-vol
             mountPath: /etc/sample/
             readOnly: true
+
+          - name: enc-vol
+            mountPath: /etc/enc/
+            readOnly: true
    
       volumes:
         - name: sample-vol
           configMap:
-            name: envconfmap  
+            name: envconfmap
+
+        - name: enc-vol
+          secret:
+            secretName: enc  
