@@ -14,7 +14,7 @@ cat > default-network.xml <<EOF
 	<bridge name='virbr0' stp='on' delay='0'/>
 	<ip address='192.168.128.1' netmask='255.255.255.0'>
 		<dhcp>
-			<range start='192.168.128.2' end='192.168.128.254' />
+			<range start='192.168.128.2' end='192.168.128.2' />
 		</dhcp>
 	</ip>
 </network>
