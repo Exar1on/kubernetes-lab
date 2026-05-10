@@ -3,3 +3,7 @@ resources:
 images:
   - name: nginx
     newTag: latest
+configMapGenerator:
+  - name: healtz
+    files:
+      - nginx.conf
